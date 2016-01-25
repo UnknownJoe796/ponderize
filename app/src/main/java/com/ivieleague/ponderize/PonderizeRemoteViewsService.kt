@@ -31,13 +31,13 @@ class PonderizeRemoteViewsService() : RemoteViewsService() {
                 reload()
             }
 
-            override fun getCount(): Int = verses.size()
+            override fun getCount(): Int = verses.size
 
             override fun getViewTypeCount(): Int = 1
 
             override fun getViewAt(position: Int): RemoteViews? {
                 return RemoteViews(packageName, R.layout.textview).apply {
-                    if (verses.size() > 1) {
+                    if (verses.size > 1) {
                         setTextViewText(R.id.text, verses[position].verse.toString() + ") " + verses[position].text)
                     } else {
                         setTextViewText(R.id.text, verses[position].text)

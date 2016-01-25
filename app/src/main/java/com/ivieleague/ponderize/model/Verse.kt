@@ -23,9 +23,9 @@ class Verse(
 }
 
 public val ArrayList<Verse>.title: String get() {
-    if (size() == 0) {
+    if (size == 0) {
         return "None"
-    } else if (size() == 1) {
+    } else if (size == 1) {
         return this[0].title
     } else {
         val builder = StringBuilder()
@@ -36,7 +36,7 @@ public val ArrayList<Verse>.title: String get() {
             if (verse.verse == sublist.last().verse + 1) {
                 sublist.add(verse)
             } else {
-                if (sublist.size() == 1) {
+                if (sublist.size == 1) {
                     builder.append(", ")
                 } else {
                     builder.append(" - ").append(sublist.last().verse).append(", ")
@@ -47,7 +47,7 @@ public val ArrayList<Verse>.title: String get() {
                 builder.append(verse.verse.toString())
             }
         }
-        if (sublist.size() > 1) {
+        if (sublist.size > 1) {
             builder.append(" - ").append(sublist.last().verse)
         }
         //TODO: Improve this text for unordered verses
@@ -56,9 +56,9 @@ public val ArrayList<Verse>.title: String get() {
 }
 
 public val ArrayList<Verse>.text: String get() {
-    if (size() <= 0) {
+    if (size <= 0) {
         return "No verse selected."
-    } else if (size() == 1) {
+    } else if (size == 1) {
         return this[0].text
     } else {
         return joinToString("\n\n") { it.verse.toString() + ") " + it.text }

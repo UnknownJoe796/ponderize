@@ -9,10 +9,11 @@ import com.ivieleague.ponderize.model.Verse
 import com.ivieleague.ponderize.model.text
 import com.ivieleague.ponderize.model.title
 import com.lightningkite.kotlincomponents.async.doAsync
-import com.lightningkite.kotlincomponents.databinding.Bond
 import com.lightningkite.kotlincomponents.dip
+import com.lightningkite.kotlincomponents.linearLayout
+import com.lightningkite.kotlincomponents.observable.KObservable
 import com.lightningkite.kotlincomponents.vertical
-import com.lightningkite.kotlincomponents.viewcontroller.AutocleanViewController
+import com.lightningkite.kotlincomponents.viewcontroller.StandardViewController
 import com.lightningkite.kotlincomponents.viewcontroller.containers.VCStack
 import com.lightningkite.kotlincomponents.viewcontroller.implementations.VCActivity
 import org.jetbrains.anko.*
@@ -21,16 +22,14 @@ import java.util.*
 /**
  * Created by josep on 10/4/2015.
  */
-class MainVC(val stack: VCStack, val widgetId: Int) : AutocleanViewController() {
+class MainVC(val stack: VCStack, val widgetId: Int) : StandardViewController() {
 
-    val versesBond: Bond<ArrayList<Verse>> = listener(Bond(ArrayList<Verse>()))
+    val versesBond: KObservable<ArrayList<Verse>> = KObservable(ArrayList<Verse>())
     var verses: ArrayList<Verse> by versesBond
 
-    override fun make(activity: VCActivity): View {
-        super.make(activity)
-
-        versesBond.bind {
-            if (verses.size() == 0) return@bind
+    override fun makeView(activity: VCActivity): View {
+        connect(versesBond) {
+            if (verses.size == 0) return@connect
             Config.setVerses(activity, widgetId, it)
             if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
                 val component = ComponentName(activity, PonderizeAppWidgetProvider::class.java);
@@ -44,9 +43,9 @@ class MainVC(val stack: VCStack, val widgetId: Int) : AutocleanViewController() 
         }
 
         val verseFromSP = Config.getVerses(activity, widgetId)
-        if (verseFromSP.size() > 0) verses = verseFromSP
+        if (verseFromSP.size > 0) verses = verseFromSP
 
-        return _LinearLayout(activity).apply {
+        return linearLayout(activity) {
             padding = dip(8)
             orientation = vertical
             gravity = Gravity.CENTER
@@ -56,7 +55,7 @@ class MainVC(val stack: VCStack, val widgetId: Int) : AutocleanViewController() 
 
             textView {
                 styleDefault()
-                versesBond.bind {
+                connect(versesBond) {
                     text = it.title
                 }
             }.lparams(wrapContent, wrapContent)
@@ -64,7 +63,7 @@ class MainVC(val stack: VCStack, val widgetId: Int) : AutocleanViewController() 
             scrollView {
                 textView {
                     styleDefault()
-                    versesBond.bind {
+                    connect(versesBond) {
                         text = it.text
                     }
                 }.lparams(wrapContent, wrapContent)

@@ -7,10 +7,13 @@ import com.ivieleague.ponderize.model.Book
 import com.ivieleague.ponderize.model.Verse
 import com.ivieleague.ponderize.styleHeader
 import com.ivieleague.ponderize.styleItem
+import com.lightningkite.kotlincomponents.adapter.LightningAdapter
 import com.lightningkite.kotlincomponents.adapter.ViewControllerAdapter
 import com.lightningkite.kotlincomponents.selectableItemBackground
+import com.lightningkite.kotlincomponents.selectableItemBackgroundResource
 import com.lightningkite.kotlincomponents.vertical
 import com.lightningkite.kotlincomponents.viewcontroller.AutocleanViewController
+import com.lightningkite.kotlincomponents.viewcontroller.StandardViewController
 import com.lightningkite.kotlincomponents.viewcontroller.containers.VCStack
 import com.lightningkite.kotlincomponents.viewcontroller.implementations.VCActivity
 import org.jetbrains.anko.*
@@ -19,27 +22,27 @@ import java.util.*
 /**
  * Created by josep on 10/4/2015.
  */
-class BookVC(val stack: VCStack, val book: Book, val onResult: (ArrayList<Verse>) -> Unit) : AutocleanViewController() {
-
-    override fun make(activity: VCActivity): View {
-        super.make(activity)
+class BookVC(val stack: VCStack, val book: Book, val onResult: (ArrayList<Verse>) -> Unit) : StandardViewController() {
+    override fun makeView(activity: VCActivity): View {
         return _LinearLayout(activity).apply {
             gravity = Gravity.CENTER
             orientation = vertical
+
             textView(book.title) {
                 styleHeader()
             }.lparams(wrapContent, wrapContent)
+
             listView {
-                adapter = ViewControllerAdapter.quick(activity, book.chapters.toArrayList()) {
+                adapter = LightningAdapter(book.chapters.toArrayList()) { obs->
                     TextView(context).apply {
-                        backgroundResource = selectableItemBackground
+                        backgroundResource = selectableItemBackgroundResource
                         styleItem()
-                        itemBond.bind {
+                        connect(obs) {
                             text = it.title
                         }
 
                         onClick {
-                            stack.push(ChapterVC(stack, item, onResult))
+                            stack.push(ChapterVC(stack, obs.value, onResult))
                         }
                     }
                 }
