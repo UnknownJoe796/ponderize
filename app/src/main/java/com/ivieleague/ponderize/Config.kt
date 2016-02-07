@@ -5,6 +5,7 @@ import android.content.Context
 import com.ivieleague.ponderize.model.Verse
 import com.lightningkite.kotlincomponents.gsonFrom
 import com.lightningkite.kotlincomponents.gsonTo
+import com.lightningkite.kotlincomponents.logging.logD
 import org.jetbrains.anko.defaultSharedPreferences
 import java.util.*
 
@@ -19,15 +20,20 @@ object Config {
 
     public fun getVerses(context: Context, id: Int): ArrayList<Verse> {
         var verseJSON: String? = context.defaultSharedPreferences.getString(extraVerse(id), null)
+        logD(verseJSON)
         if (verseJSON == null) {
             verseJSON = context.defaultSharedPreferences.getString(extraVerse(AppWidgetManager.INVALID_APPWIDGET_ID), null)
         }
         if (verseJSON == null) return ArrayList()
         try {
-            return verseJSON.gsonFrom<ArrayList<Verse>>()!!
+            val results = verseJSON.gsonFrom<ArrayList<Verse>>()!!
+            logD(results)
+            return results
         } catch(e: Exception) {
             try {
-                return arrayListOf(verseJSON.gsonFrom<Verse>()!!)
+                val result = verseJSON.gsonFrom<Verse>()!!
+                logD(result)
+                return arrayListOf(result)
             } catch(e: Exception) {
                 e.printStackTrace()
                 return ArrayList()
@@ -36,8 +42,10 @@ object Config {
     }
 
     public fun setVerses(context: Context, id: Int, verses: ArrayList<Verse>) {
+        val verseJSON = verses.gsonTo()
+        logD(verseJSON)
         context.defaultSharedPreferences.edit().putString(extraVerse(id),
-                verses.joinToString(", ", "[", "]") { it.gsonTo() }
+                verseJSON
         ).commit()
     }
 }

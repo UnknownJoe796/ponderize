@@ -9,9 +9,9 @@ import com.ivieleague.ponderize.model.Verse
 import com.ivieleague.ponderize.model.text
 import com.ivieleague.ponderize.model.title
 import com.lightningkite.kotlincomponents.async.doAsync
-import com.lightningkite.kotlincomponents.dip
 import com.lightningkite.kotlincomponents.linearLayout
 import com.lightningkite.kotlincomponents.observable.KObservable
+import com.lightningkite.kotlincomponents.observable.bind
 import com.lightningkite.kotlincomponents.vertical
 import com.lightningkite.kotlincomponents.viewcontroller.StandardViewController
 import com.lightningkite.kotlincomponents.viewcontroller.containers.VCStack
@@ -28,8 +28,9 @@ class MainVC(val stack: VCStack, val widgetId: Int) : StandardViewController() {
     var verses: ArrayList<Verse> by versesBond
 
     override fun makeView(activity: VCActivity): View {
-        connect(versesBond) {
-            if (verses.size == 0) return@connect
+        connectVC(versesBond) {
+            println(versesBond.get().javaClass)
+            if (verses.size == 0) return@connectVC
             Config.setVerses(activity, widgetId, it)
             if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
                 val component = ComponentName(activity, PonderizeAppWidgetProvider::class.java);
@@ -55,7 +56,7 @@ class MainVC(val stack: VCStack, val widgetId: Int) : StandardViewController() {
 
             textView {
                 styleDefault()
-                connect(versesBond) {
+                bind(versesBond) {
                     text = it.title
                 }
             }.lparams(wrapContent, wrapContent)
@@ -63,7 +64,7 @@ class MainVC(val stack: VCStack, val widgetId: Int) : StandardViewController() {
             scrollView {
                 textView {
                     styleDefault()
-                    connect(versesBond) {
+                    bind(versesBond) {
                         text = it.text
                     }
                 }.lparams(wrapContent, wrapContent)

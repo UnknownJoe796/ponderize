@@ -13,12 +13,12 @@ import com.ivieleague.ponderize.model.title
 import com.ivieleague.ponderize.styleDefault
 import com.ivieleague.ponderize.styleHeader
 import com.ivieleague.ponderize.styleItem
-import com.lightningkite.kotlincomponents.*
 import com.lightningkite.kotlincomponents.adapter.LightningAdapter
-import com.lightningkite.kotlincomponents.adapter.ViewControllerAdapter
-import com.lightningkite.kotlincomponents.databinding.Bond
+import com.lightningkite.kotlincomponents.alpha
 import com.lightningkite.kotlincomponents.observable.KObservable
-import com.lightningkite.kotlincomponents.viewcontroller.AutocleanViewController
+import com.lightningkite.kotlincomponents.observable.bind
+import com.lightningkite.kotlincomponents.selectableItemBackgroundResource
+import com.lightningkite.kotlincomponents.verticalLayout
 import com.lightningkite.kotlincomponents.viewcontroller.StandardViewController
 import com.lightningkite.kotlincomponents.viewcontroller.containers.VCStack
 import com.lightningkite.kotlincomponents.viewcontroller.implementations.VCActivity
@@ -44,7 +44,7 @@ class ChapterVC(val stack: VCStack, val chapter: Chapter, val onResult: (ArrayLi
             adapter = LightningAdapter(chapter.verses) { itemObs ->
                 TextView(context).apply {
                     styleItem()
-                    connect(itemObs) {
+                    bind(itemObs) {
                         text = it.verse.toString() + ") " + it.text
                         if (verses.contains(it)) {
                             val selDraw = ContextCompat.getDrawable(context, selectableItemBackgroundResource)
@@ -53,7 +53,7 @@ class ChapterVC(val stack: VCStack, val chapter: Chapter, val onResult: (ArrayLi
                             backgroundResource = selectableItemBackgroundResource
                         }
                     }
-                    connect(versesBond) {
+                    bind(versesBond) {
                         if (it.contains(itemObs.value)) {
                             val selDraw = ContextCompat.getDrawable(context, selectableItemBackgroundResource)
                             background = LayerDrawable(arrayOf(selDraw, ColorDrawable(Color.WHITE.alpha(.25f))))
@@ -79,7 +79,7 @@ class ChapterVC(val stack: VCStack, val chapter: Chapter, val onResult: (ArrayLi
         textView {
             styleDefault()
             gravity = Gravity.CENTER
-            connect(versesBond) {
+            bind(versesBond) {
                 text = it.title
             }
         }.lparams(matchParent, wrapContent)
@@ -87,7 +87,7 @@ class ChapterVC(val stack: VCStack, val chapter: Chapter, val onResult: (ArrayLi
         linearLayout {
             button {
                 styleDefault()
-                connect(versesBond) {
+                bind(versesBond) {
                     if (it.size <= 0) {
                         isEnabled = false
                         text = "Select a verse..."
@@ -109,7 +109,7 @@ class ChapterVC(val stack: VCStack, val chapter: Chapter, val onResult: (ArrayLi
 
             button("Clear") {
                 styleDefault()
-                connect(versesBond) {
+                bind(versesBond) {
                     if (it.size == 0)
                         isEnabled = false
                     else

@@ -9,9 +9,9 @@ import com.ivieleague.ponderize.styleHeader
 import com.ivieleague.ponderize.styleItem
 import com.lightningkite.kotlincomponents.adapter.LightningAdapter
 import com.lightningkite.kotlincomponents.linearLayout
+import com.lightningkite.kotlincomponents.observable.bind
 import com.lightningkite.kotlincomponents.selectableItemBackgroundResource
 import com.lightningkite.kotlincomponents.vertical
-import com.lightningkite.kotlincomponents.viewcontroller.AutocleanViewController
 import com.lightningkite.kotlincomponents.viewcontroller.StandardViewController
 import com.lightningkite.kotlincomponents.viewcontroller.containers.VCStack
 import com.lightningkite.kotlincomponents.viewcontroller.implementations.VCActivity
@@ -37,7 +37,7 @@ class VolumeVC(val stack: VCStack, val volume: Volume, val onResult: (ArrayList<
                     TextView(context).apply {
                         styleItem()
                         backgroundResource = selectableItemBackgroundResource
-                        connect(itemObs) {
+                        bind(itemObs) {
                             text = it.title
                         }
                         onClick {

@@ -8,14 +8,11 @@ import com.ivieleague.ponderize.model.Verse
 import com.ivieleague.ponderize.styleHeader
 import com.ivieleague.ponderize.styleItem
 import com.lightningkite.kotlincomponents.adapter.LightningAdapter
-import com.lightningkite.kotlincomponents.adapter.ViewControllerAdapter
 import com.lightningkite.kotlincomponents.linearLayout
-import com.lightningkite.kotlincomponents.selectableItemBackground
+import com.lightningkite.kotlincomponents.observable.bind
 import com.lightningkite.kotlincomponents.selectableItemBackgroundResource
 import com.lightningkite.kotlincomponents.vertical
-import com.lightningkite.kotlincomponents.viewcontroller.AutocleanViewController
 import com.lightningkite.kotlincomponents.viewcontroller.StandardViewController
-import com.lightningkite.kotlincomponents.viewcontroller.ViewController
 import com.lightningkite.kotlincomponents.viewcontroller.containers.VCStack
 import com.lightningkite.kotlincomponents.viewcontroller.implementations.VCActivity
 import org.jetbrains.anko.*
@@ -39,7 +36,7 @@ class DatabaseVC(val stack: VCStack, val database: Database, val onResult: (Arra
                     TextView(context).apply {
                         styleItem()
                         backgroundResource = selectableItemBackgroundResource
-                        connect(itemObs) {
+                        bind(itemObs) {
                             text = it.title
                         }
                         onClick {

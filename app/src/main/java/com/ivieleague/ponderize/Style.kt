@@ -3,7 +3,7 @@ package com.ivieleague.ponderize
 import android.graphics.Color
 import android.view.Gravity
 import android.widget.TextView
-import com.lightningkite.kotlincomponents.dip
+import org.jetbrains.anko.dip
 import org.jetbrains.anko.padding
 import org.jetbrains.anko.textColor
 

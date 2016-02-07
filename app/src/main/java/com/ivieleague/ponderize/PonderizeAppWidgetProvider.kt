@@ -11,7 +11,7 @@ class PonderizeAppWidgetProvider() : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
-        val N = appWidgetIds.size();
+        val N = appWidgetIds.size;
 
         // Perform this loop procedure for each App Widget that belongs to this provider
         for (i in 0..N - 1) {
